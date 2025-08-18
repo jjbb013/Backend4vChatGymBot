@@ -92,3 +92,34 @@ CREATE TABLE fitness_logs (
 - `POST /log/delete-last`: 撤回上一条健身记录
 
 详细的接口请求和响应格式请参考 `NORTHFLANK_BACKEND_SPEC.md`。
+
+---
+
+## 高级用法: 使用 Northflank CLI
+
+对于更高级的管理和自动化操作，你可以安装并使用 Northflank CLI。CLI 工具允许你通过命令行与你的 Northflank 账户进行交互。
+
+### 安装 CLI
+
+根据官方文档，你需要 Node.js (v12+) 环境，然后执行以下命令进行全局安装：
+
+```bash
+npm i -g @northflank/cli
+```
+
+### 登录和认证
+
+安装成功后，你需要登录你的 Northflank 账户。执行以下命令，它会打开一个浏览器窗口让你授权：
+
+```bash
+northflank login
+```
+
+你需要先在 Northflank 网站的账户设置中创建一个 API Token，然后在登录流程中使用它。
+
+### 用途说明
+
+- **管理资源**: 你可以使用 CLI 创建、查看、删除服务和数据库等。
+- **CI/CD 集成**: 虽然本项目推荐使用 Git-push 的方式自动部署，但在复杂的 CI/CD 流程中，你可以使用 CLI 来触发构建、更新环境变量等。
+
+**请注意**: 对于本项目的部署，你**无需**安装 CLI，只需按照上面的 Git 部署指南操作即可。CLI 是一个可选的、用于高级管理的工具。
