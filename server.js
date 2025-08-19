@@ -1,17 +1,5 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
-
-// 检查所有必需的环境变量是否存在
-const requiredEnvVars = ['MYSQL_HOST', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_DATABASE'];
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    console.error(`错误: 缺少环境变量 ${envVar}。`);
-    console.error('请确保在 Northflank 的环境变量设置中，已经将数据库连接的变量正确映射。');
-    console.error('例如: Key: MYSQL_HOST, Value: ${NF_MYSQL_HOST}');
-    process.exit(1); // 启动失败
-  }
-}
-
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
@@ -29,15 +17,24 @@ let db;
 // 数据库连接函数
 async function connectToDatabase() {
   try {
-    db = await mysql.createPool({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
+    // 自动适配 Northflank 的环境变量
+    const dbConfig = {
+      host: process.env.NF_MYSQL_HOST || process.env.MYSQL_HOST,
+      user: process.env.NF_MYSQL_USER || process.env.MYSQL_USER,
+      password: process.env.NF_MYSQL_PASSWORD || process.env.MYSQL_PASSWORD,
+      database: process.env.NF_MYSQL_DATABASE || process.env.MYSQL_DATABASE,
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0
-    });
+    };
+
+    // 检查数据库配置是否完整
+    if (!dbConfig.host || !dbConfig.user || !dbConfig.password || !dbConfig.database) {
+      console.error('数据库连接信息不完整。请检查环境变量设置。');
+      process.exit(1);
+    }
+    
+    db = await mysql.createPool(dbConfig);
     console.log('成功连接到 MySQL 数据库');
   } catch (error) {
     console.error('连接数据库失败:', error);

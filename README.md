@@ -52,13 +52,7 @@
     -   `NF_MYSQL_USER`
     -   `NF_MYSQL_PASSWORD`
     -   `NF_MYSQL_DATABASE`
-5.  由于我们的 `server.js` 代码中使用的是 `MYSQL_HOST`, `MYSQL_USER` 等变量名，你需要在这里添加一个 **别名 (Alias)**，将 Northflank 提供的变量映射到我们代码需要的变量名。
-    -   在 **Environment Variables** 部分，点击 `Add variable`。
-    -   **Key**: `MYSQL_HOST`, **Value**: `${NF_MYSQL_HOST}`
-    -   **Key**: `MYSQL_USER`, **Value**: `${NF_MYSQL_USER}`
-    -   **Key**: `MYSQL_PASSWORD`, **Value**: `${NF_MYSQL_PASSWORD}`
-    -   **Key**: `MYSQL_DATABASE`, **Value**: `${NF_MYSQL_DATABASE}`
-6.  保存更改。Northflank 会自动触发一次新的部署。
+5.  保存更改。Northflank 会自动触发一次新的部署。代码已配置为自动识别 Northflank 的环境变量 (`NF_MYSQL_HOST` 等)，因此**无需手动创建别名**。
 
 ### 步骤 6: 初始化数据库表结构
 
