@@ -1,0 +1,68 @@
+apiVersion: v1.2
+spec:
+  kind: Workflow
+  spec:
+    type: sequential
+    steps:
+      - kind: Project
+        ref: project
+        spec:
+          name: fitness-project # 可以根据需要修改项目名称
+          region: europe-west # 选择合适的区域，例如 europe-west, us-east
+          networking:
+            allowedIngressProjects: []
+      - kind: Workflow
+        spec:
+          type: sequential
+          context:
+            projectId: ${refs.project.id}
+          steps:
+            - kind: Addon
+              spec:
+                externalAccessEnabled: false
+                type: mysql # 修改为 mysql
+                billing:
+                  replicas: 1
+                  storage: 4096
+                  storageClass: ssd
+                  deploymentPlan: nf-compute-10 # 免费计划
+                tlsEnabled: true
+                name: fitness-db # 数据库名称
+                version: "8.0" # MySQL 版本，可以根据需要修改
+              ref: database
+            - kind: CombinedService
+              spec:
+                deployment:
+                  instances: 1
+                  storage:
+                    ephemeralStorage:
+                      storageSize: 1024
+                    shmSize: 64
+                  docker:
+                    configType: default
+                runtimeEnvironment: {} # Northflank 会自动注入 NF_MYSQL_* 变量，代码已适配
+                runtimeFiles: {}
+                buildArguments: {}
+                buildFiles: {}
+                billing:
+                  deploymentPlan: nf-compute-10 # 免费计划
+                  buildPlan: nf-compute-400-16
+                name: fitness-backend # 服务名称
+                vcsData:
+                  projectType: github
+                  projectUrl: https://github.com/jjbb013/Backend4vChatGymBot # 替换为你的仓库地址
+                  projectBranch: main # 你的主分支名称，通常是 main 或 master
+                ports:
+                  - internalPort: 3000
+                    protocol: HTTP
+                    name: http-port
+                    public: true
+                    domains: []
+                    security:
+                      policies: []
+                      credentials: []
+                    disableNfDomain: false
+                buildSettings:
+                  buildpack: # 使用 buildpack 方式构建 Node.js 应用
+                    buildCommand: npm install
+                    startCommand: node server.js
