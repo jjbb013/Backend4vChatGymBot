@@ -1,5 +1,11 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
+
+// --- DEBUGGING: Log all environment variables ---
+console.log('--- Available Environment Variables ---');
+console.log(process.env);
+console.log('------------------------------------');
+// --- END DEBUGGING ---
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
