@@ -1,5 +1,17 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
+
+// 检查所有必需的环境变量是否存在
+const requiredEnvVars = ['MYSQL_HOST', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_DATABASE'];
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`错误: 缺少环境变量 ${envVar}。`);
+    console.error('请确保在 Northflank 的环境变量设置中，已经将数据库连接的变量正确映射。');
+    console.error('例如: Key: MYSQL_HOST, Value: ${NF_MYSQL_HOST}');
+    process.exit(1); // 启动失败
+  }
+}
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
