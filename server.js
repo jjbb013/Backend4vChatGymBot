@@ -1,6 +1,12 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
 
+// --- DEBUGGING: Log all environment variables ---
+console.log('--- Available Environment Variables ---');
+console.log(process.env);
+console.log('------------------------------------');
+// --- END DEBUGGING ---
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
@@ -78,6 +84,7 @@ app.post('/log', async (req, res) => {
 
   } catch (error) {
     console.error('添加健身记录失败:', error);
+    console.error('详细错误:', error); // 添加详细错误日志
     res.status(500).json({ error: '服务器内部错误，无法添加记录' });
   }
 });
@@ -121,6 +128,7 @@ app.post('/logs/period', async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error('按时间段获取记录失败:', error);
+    console.error('详细错误:', error); // 添加详细错误日志
     res.status(500).json({ error: '服务器内部错误，无法获取记录' });
   }
 });
@@ -155,6 +163,7 @@ app.post('/log/delete-last', async (req, res) => {
 
   } catch (error) {
     console.error('撤回记录失败:', error);
+    console.error('详细错误:', error); // 添加详细错误日志
     res.status(500).json({ error: '服务器内部错误，无法撤回记录' });
   }
 });
