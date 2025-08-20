@@ -1,11 +1,6 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
 
-// --- DEBUGGING: Log all environment variables ---
-console.log('--- Available Environment Variables ---');
-console.log(process.env);
-console.log('------------------------------------');
-// --- END DEBUGGING ---
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
@@ -25,10 +20,10 @@ async function connectToDatabase() {
   try {
     // 自动适配 Northflank 的环境变量
     const dbConfig = {
-      host: process.env.NF_MYSQL_HOST || process.env.MYSQL_HOST,
-      user: process.env.NF_MYSQL_USER || process.env.MYSQL_USER,
-      password: process.env.NF_MYSQL_PASSWORD || process.env.MYSQL_PASSWORD,
-      database: process.env.NF_MYSQL_DATABASE || process.env.MYSQL_DATABASE,
+      host: process.env.NF_GYMMYSQL_HOST || process.env.MYSQL_HOST,
+      user: process.env.NF_GYMMYSQL_USERNAME || process.env.MYSQL_USER,
+      password: process.env.NF_GYMMYSQL_PASSWORD || process.env.MYSQL_PASSWORD,
+      database: process.env.NF_GYMMYSQL_DATABASE || process.env.MYSQL_DATABASE,
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0

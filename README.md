@@ -31,8 +31,13 @@
 
 1.  在同一个项目中，点击 `Add new` -> `Service`。
 2.  选择 `Deployment from Git repository`。
-3.  授权 Northflank 访问你的 GitHub 账户，并选择你刚刚 Fork 的仓库。
-4.  **构建选项 (Build Options)**:
+3.  **授权 GitHub 仓库**:
+    -   点击 `Configure Northflank on GitHub`。
+    -   在弹出的 GitHub 页面中，选择你的账户。
+    -   在 "Repository access" 部分，选择 `Only select repositories`，然后从下拉列表中勾选你 Fork 的 `Backend4vChatGymBot` 仓库。
+    -   点击 `Install & Authorize`。
+4.  **选择仓库**: 返回 Northflank，现在你应该可以在列表中看到并选择 `Backend4vChatGymBot` 仓库了。选择 `main` 分支。
+5.  **构建选项 (Build Options)**:
     -   **Buildpack**: Northflank 会自动检测到这是一个 Node.js 项目，无需修改。
     -   **Build Command**: `npm install`
     -   **Start Command**: `node server.js`
@@ -48,11 +53,11 @@
 2.  向下滚动到 **Internal Connections** 部分。
 3.  点击 `Add internal connection`，选择你之前创建的 MySQL 数据库 (`fitness-db`)。
 4.  Northflank 会自动将数据库的连接凭证（主机、用户、密码、数据库名）作为环境变量注入到你的服务中。这些变量的名称格式如下：
-    -   `NF_MYSQL_HOST`
-    -   `NF_MYSQL_USER`
-    -   `NF_MYSQL_PASSWORD`
-    -   `NF_MYSQL_DATABASE`
-5.  保存更改。Northflank 会自动触发一次新的部署。代码已配置为自动识别 Northflank 的环境变量 (`NF_MYSQL_HOST` 等)，因此**无需手动创建别名**。
+    -   `NF_GYMMYSQL_HOST`
+    -   `NF_GYMMYSQL_USERNAME`
+    -   `NF_GYMMYSQL_PASSWORD`
+    -   `NF_GYMMYSQL_DATABASE`
+5.  保存更改。Northflank 会自动触发一次新的部署。代码已配置为自动识别 Northflank 的环境变量 (`NF_GYMMYSQL_HOST` 等)，因此**无需手动创建别名**。
 
 ### 步骤 6: 初始化数据库表结构
 
