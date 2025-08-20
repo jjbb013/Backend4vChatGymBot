@@ -1,12 +1,6 @@
 // 引入必要的模块
 require('dotenv').config(); // 用于加载 .env 文件中的环境变量
 
-// --- DEBUGGING: Log all environment variables ---
-console.log('--- Available Environment Variables ---');
-console.log(process.env);
-console.log('------------------------------------');
-// --- END DEBUGGING ---
-
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
@@ -32,13 +26,15 @@ async function connectToDatabase() {
       database: process.env.NF_GYMMYSQL_DATABASE || process.env.MYSQL_DATABASE,
       waitForConnections: true,
       connectionLimit: 10,
-      queueLimit: 0
+      queueLimit: 0,
+      ssl: {
+        rejectUnauthorized: false // 允许自签名证书，生产环境应更严格
+      }
     };
 
     // 检查数据库配置是否完整
     if (!dbConfig.host || !dbConfig.user || !dbConfig.password || !dbConfig.database) {
       console.error('数据库连接信息不完整。请检查环境变量设置。');
-      console.error('当前数据库配置:', dbConfig); // 打印 dbConfig
       process.exit(1);
     }
     
